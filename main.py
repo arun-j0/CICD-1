@@ -4,7 +4,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the FastAPI Calculator!"}
+    return {"message": "Welcome to the FastAPI Calculator"}
 
 @app.get("/calculate")
 def calculate(operation: str, num1: float, num2: float):
