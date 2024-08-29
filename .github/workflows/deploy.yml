@@ -3,7 +3,7 @@ name: Deploy to Google Cloud Run
 on:
   push:
     branches:
-      - main  # or the branch you want to trigger the deploymen
+      - main  # The branch that triggers the deployment
 
 jobs:
   build-and-deploy:
@@ -21,16 +21,15 @@ jobs:
       - name: Install Google Cloud SDK
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl
-          curl -sSL https://sdk.cloud.google.com | bash
-          exec -l $SHELL
-          gcloud components install -q app-engine-python
-          gcloud components update -q
-        
+          sudo apt-get install -y apt-transport-https ca-certificates gnupg
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+          sudo apt-get update && sudo apt-get install -y google-cloud-sdk
+
       - name: Authenticate with Google Cloud
         run: echo "${{ secrets.GCP_SA_KEY }}" | base64 --decode > gcloud-key.json
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+          GOOGLE_APPLICATION_CREDENTIALS: gcloud-key.json
 
       - name: Configure gcloud
         run: |
@@ -49,3 +48,6 @@ jobs:
             --platform managed \
             --region us-central1 \
             --allow-unauthenticated
+
+      - name: Clean up
+        run: rm gcloud-key.json
