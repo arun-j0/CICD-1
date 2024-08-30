@@ -2,11 +2,14 @@ name: Restrict Main Merges
 
 on:
   pull_request:
+    branches:
+      - main  # Ensure it's set to the correct branch
     types: [opened, synchronize, reopened]
 
 jobs:
   check-pr-source:
     runs-on: ubuntu-latest
+    name: Check PR Source  # This name should be descriptive and will appear in the status checks
     steps:
       - name: Check if PR is from staging to main
         run: |
