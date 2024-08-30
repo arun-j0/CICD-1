@@ -4,7 +4,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the FastAPI Calculator"}
+    return {"message": "Welcome to the FastAPI Calculator!"}
 
 @app.get("/calculate")
 def calculate(operation: str, num1: float, num2: float):
@@ -22,3 +22,5 @@ def calculate(operation: str, num1: float, num2: float):
         raise HTTPException(status_code=400, detail="Invalid operation.")
     
     return {"operation": operation, "num1": num1, "num2": num2, "result": result}
+
+
