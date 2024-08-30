@@ -5,12 +5,12 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copy the requirements file to the container
-COPY requirements.txt requirements.txt
+COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application code to the container
+# Copy the entire application code to the container
 COPY . .
 
 # Expose the port that the application will run on
@@ -20,4 +20,4 @@ EXPOSE 8080
 ENV PORT=8080
 
 # Run the FastAPI application with Uvicorn, binding to the specified port
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
