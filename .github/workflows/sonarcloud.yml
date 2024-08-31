@@ -3,13 +3,10 @@ name: SonarCloud Analysis
 on:
   push:
     branches:
-      - staging
-      - patch
+      - staging  # Change to your default branch or specific branches
   pull_request:
     branches:
       - staging
-      - patch
-  workflow_dispatch:
 
 jobs:
   sonarcloud:
@@ -23,9 +20,8 @@ jobs:
       - name: Set up Java 17
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'  # Using Temurin distribution
+          distribution: 'temurin'  
           java-version: '17'
-          cache: 'maven'
 
       - name: Set up Python 3.10.12
         uses: actions/setup-python@v4
@@ -43,6 +39,12 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
 
+      - name: Cache SonarCloud scanner
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/scanner
+          key: ${{ runner.os }}-sonar-scanner
+
       - name: Install SonarCloud scanner
         run: |
           curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
@@ -51,7 +53,6 @@ jobs:
 
       - name: Run SonarCloud Scan
         env:
-          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}  # Ensure Java 17 is used
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           ./sonar-scanner/bin/sonar-scanner \
