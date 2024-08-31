@@ -47,7 +47,8 @@ jobs:
 
       - name: Install SonarCloud scanner
         run: |
-          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/latest/linux --extract
+          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/latest/linux
+          unzip sonar-scanner.zip  # Extract the downloaded zip file
           mv sonar-scanner sonar-scanner-<version>  # Optional: Rename scanner with version
 
       - name: Run SonarCloud Scan
